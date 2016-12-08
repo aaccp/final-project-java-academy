@@ -1,7 +1,6 @@
 package com.accentureacademy;
 
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
@@ -25,7 +24,7 @@ public class WelcomeControllerTest {
     public void getWelcomeMessage() throws Exception {
         ResponseEntity<String> response = template.getForEntity("/welcome",
                 String.class);
-        assertThat(response.getBody(), equalTo("Welcome!"));
+        assertThat(response.getBody(), containsString("Welcome!"));
     }
     
     @Test
@@ -33,6 +32,6 @@ public class WelcomeControllerTest {
     	String path = "/welcome?name=" + USER;
     	ResponseEntity<String> response = template.getForEntity(path ,
                 String.class);
-        assertThat(response.getBody(), equalTo("Welcome, " + USER + "!"));
+        assertThat(response.getBody(), containsString("Welcome, " + USER + "!"));
     }
 }
