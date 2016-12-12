@@ -1,37 +1,42 @@
 package com.accentureacademy;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+import com.accentureacademy.controller.WelcomeController;
+import com.accentureacademy.model.Welcome;
+import com.accentureacademy.repository.UserRepository;
+
 public class WelcomeControllerTest {
 
 	private final String USER = "Bob";
+    
+    @InjectMocks
+    private WelcomeController ac;
+    
+    @Mock
+    private UserRepository mock;
 	
-    @Autowired
-    private TestRestTemplate template;
+	@Before
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     public void getWelcomeMessage() throws Exception {
-        ResponseEntity<String> response = template.getForEntity("/welcome",
-                String.class);
-        assertThat(response.getBody(), containsString("Welcome!"));
+    	Welcome welcome = ac.createWelcome("");
+    	assertThat(welcome.getwMessage(), equalTo("Welcome!"));
     }
     
     @Test
     public void getCustomWelcomeMessage() throws Exception{
-    	String path = "/welcome?name=" + USER;
-    	ResponseEntity<String> response = template.getForEntity(path ,
-                String.class);
-        assertThat(response.getBody(), containsString("Welcome, " + USER + "!"));
+    	Welcome welcome = ac.createWelcome(USER);
+    	assertThat(welcome.getwMessage(), equalTo("Welcome, " + USER + "!"));
     }
 }
