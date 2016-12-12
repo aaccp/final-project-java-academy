@@ -14,7 +14,7 @@ public class User {
 	private String name;
 	private String hobbies;
 	
-	protected User(){}
+	public User(){}
 	
 	public User(String name){
 		this.name = name;
