@@ -7,24 +7,11 @@
       </div>
     </div>
 
-    <div class="container" ng-controller="WelcomeController">
-      <!-- Example row of columns -->
-      <div class="row">
-        <div class="col-md-12 text-center">
-          <h2>Access as User</h2>
-          <form class="form-horizontal" role="form" ng-submit="getName(path)">
-            <div class="form-group">
-                <div class="col-sm-offset-1 col-sm-10">
-                    <input type="text" ng-model="path.name" id="name" placeholder="What's your name?"/>
-                    <input type="submit" class="btn btn-primary" value="Enter >>"/>
-                </div>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <hr>
-
-      <footer>
-      </footer>
+    <div class="container">
+       <div class="col-md-12 text-center" ng-controller="WelcomeController">
+         <h2>Access as User</h2>
+         <input type="text" ng-model="name">
+         <button ng-click="setName()">Enter >></button>
+         <hr>
+       </div>
     </div> <!-- /container -->

@@ -1,4 +1,5 @@
-angular.module('app.controllers', []).controller('UserListController', function($scope, $state, popupService, $window, User) {
+angular.module('app.controllers', [])
+.controller('UserListController', function($scope, $state, popupService, $window, User) {
   $scope.users = User.query();
 
   $scope.deleteUser = function(user) {
@@ -9,17 +10,21 @@ angular.module('app.controllers', []).controller('UserListController', function(
       });
     }
   };
-}).controller('WelcomeController', function($scope, $http, $state, $stateParams){
-  $scope.wPath = {"name":""};
-  $http.get('/welcome?name='+ $scope.wPath.name).
-        then(function(response) {
-            $scope.welcome = response.data;
-        });
-  $scope.getName = function(path) {
-        $scope.wPath.name = path.name;
-        $state.go('users');
-      };
-
+}).controller('WelcomeController', function($scope, $rootScope, $http, $state){ 
+	if(angular.isUndefined($rootScope.userName)){
+		$scope.path = "";
+	}else{
+		$scope.path = "?name=" + $rootScope.userName;
+	}
+	$http.get('/welcome' + $scope.path).
+	then(function(response) {
+		$scope.welcome = response.data;
+	});
+  
+	$scope.setName = function(){
+		$rootScope.userName = $scope.name;
+		$state.go('users');
+	}
 }).controller('UserViewController', function($scope, $stateParams, User) {
   $scope.user = User.get({ id: $stateParams.id });
 }).controller('UserCreateController', function($scope, $state, $stateParams, User) {
