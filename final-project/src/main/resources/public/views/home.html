@@ -1,0 +1,30 @@
+<!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container text-center">
+        <h2>Java Academy Final Project</h2>
+        <h3>Final project for the Accenture Java Academy</h3>
+        <p>Enter as a User to have a custom welcome message or access directly to the users list</p>
+      </div>
+    </div>
+
+    <div class="container" ng-controller="WelcomeController">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <h2>Access as User</h2>
+          <form class="form-horizontal" role="form" ng-submit="getName(path)">
+            <div class="form-group">
+                <div class="col-sm-offset-1 col-sm-10">
+                    <input type="text" ng-model="path.name" id="name" placeholder="What's your name?"/>
+                    <input type="submit" class="btn btn-primary" value="Enter >>"/>
+                </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <hr>
+
+      <footer>
+      </footer>
+    </div> <!-- /container -->
