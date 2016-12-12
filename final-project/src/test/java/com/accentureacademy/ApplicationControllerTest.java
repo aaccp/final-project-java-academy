@@ -18,8 +18,6 @@ import com.accentureacademy.model.User;
 import com.accentureacademy.repository.UserRepository;
 
 public class ApplicationControllerTest {
-
-	private final String USER = "Bob";
     
     @InjectMocks
     private ApplicationController ac;
@@ -30,18 +28,6 @@ public class ApplicationControllerTest {
 	@Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-    }
-
-    @Test
-    public void getWelcomeMessage() throws Exception {
-    	String str = ac.welcome("");
-    	assertThat(str, equalTo("Welcome!"));
-    }
-    
-    @Test
-    public void getCustomWelcomeMessage() throws Exception{
-    	String str = ac.welcome(USER);
-    	assertThat(str, equalTo("Welcome, " + USER + "!"));
     }
 	
 	@Test
