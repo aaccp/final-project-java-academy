@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +23,24 @@ public class UserRepositoryTest{
 
 	@Autowired
 	private UserRepository repo;
+	
+	@Before
+	public void stubData(){
+    	repo.save(new User("Mike Thompson","Soccer;Ping Pong"));
+    	repo.save(new User("Art King", "Design;Woodworking"));
+    	repo.save(new User("John Smith", "Music;"));
+	}
     
     @Test
     public void dbCanbeAccessed() throws Exception{
-    	repo.save(new User("Mike Thompson","Soccer;Ping Pong"));
-    	repo.save(new User("Art King", "Design"));
-    	repo.save(new User("John Smith", "Music;"));
-    	
     	List<User> users = repo.findAll();
     	assertThat(users.get(2).getName(), equalTo("John Smith"));
     	assertThat(users.get(0).getHobbies(), containsString("Ping Pong"));
+    }
+    
+    @Test
+    public void findByNameWorks(){
+    	User usr = repo.findByName("Art King").get(0);
+    	assertThat(usr.getHobbies(), containsString("Design"));
     }
 }
