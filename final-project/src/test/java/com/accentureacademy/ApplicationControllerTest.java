@@ -1,37 +1,79 @@
 package com.accentureacademy;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.*;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class WelcomeControllerTest {
+import com.accentureacademy.controller.ApplicationController;
+import com.accentureacademy.model.User;
+import com.accentureacademy.repository.UserRepository;
+
+public class ApplicationControllerTest {
 
 	private final String USER = "Bob";
+    
+    @InjectMocks
+    private ApplicationController ac;
+    
+    @Mock
+    private UserRepository mock;
 	
-    @Autowired
-    private TestRestTemplate template;
+	@Before
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     public void getWelcomeMessage() throws Exception {
-        ResponseEntity<String> response = template.getForEntity("/welcome",
-                String.class);
-        assertThat(response.getBody(), containsString("Welcome!"));
+    	String str = ac.welcome("");
+    	assertThat(str, equalTo("Welcome!"));
     }
     
     @Test
     public void getCustomWelcomeMessage() throws Exception{
-    	String path = "/welcome?name=" + USER;
-    	ResponseEntity<String> response = template.getForEntity(path ,
-                String.class);
-        assertThat(response.getBody(), containsString("Welcome, " + USER + "!"));
+    	String str = ac.welcome(USER);
+    	assertThat(str, equalTo("Welcome, " + USER + "!"));
     }
+	
+	@Test
+	public void addUserToDB(){
+		User user = new User("1", "A");
+		ac.addUser(user);
+		
+		verify(mock).saveAndFlush(user);
+	}
+	
+	@Test
+	public void getUserFromDB(){
+		Long id = 1l;
+		User user = new User();
+    	user.setId(id);
+		when(mock.findOne(id)).thenReturn(user);
+
+		User usr = ac.getUser(id);
+
+		verify(mock).findOne(id);
+		assertThat(usr.getId(), equalTo(id));
+	}
+	
+	@Test
+	public void getListOfUsers(){
+		List<User> users = Arrays.asList(new User("A"), new User("B"));
+		when(mock.findAll()).thenReturn(users);
+		
+		List<User> aux = ac.usersList();
+		
+		verify(mock).findAll();
+		assertThat(aux.get(0).getName(), equalTo("A"));
+	}
+    	
 }
